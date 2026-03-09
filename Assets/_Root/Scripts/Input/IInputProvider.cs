@@ -12,6 +12,7 @@ namespace JustMobyTest.Input
         event Action OnAttack;
         event Action<InputAction.CallbackContext> OnStartMove;
         event Action OnEndMove;
+        event Action OnSwitchAim;
         Vector2 PointerPosition { get; }
         void Enable();
         void Disable();

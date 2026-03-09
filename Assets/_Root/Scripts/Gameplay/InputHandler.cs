@@ -14,8 +14,11 @@ namespace JustMobyTest.Gameplay
         public event Action<Vector2> OnMove;
         
         public event Action OnAttack;
-        
+        public event Action OnStartAim;
+        public event Action OnEndAim;
+
         private bool _isMoving;
+        private bool _isAiming;
         private InputAction.CallbackContext _moveContext;
         
         public void Initialize()
@@ -23,6 +26,7 @@ namespace JustMobyTest.Gameplay
             InputProvider.OnStartMove += StartMove;
             InputProvider.OnEndMove += EndMove;
             InputProvider.OnAttack += Attack;
+            InputProvider.OnSwitchAim += SwitchAim;
         }
 
         public void Dispose()
@@ -30,6 +34,7 @@ namespace JustMobyTest.Gameplay
             InputProvider.OnStartMove -= StartMove;
             InputProvider.OnEndMove -= EndMove;
             InputProvider.OnAttack -= Attack;
+            InputProvider.OnSwitchAim -= SwitchAim;
         }
 
         public void Tick()
@@ -54,6 +59,16 @@ namespace JustMobyTest.Gameplay
         private void Attack()
         {
             OnAttack?.Invoke();
+        }
+
+        private void SwitchAim()
+        {
+            if(_isAiming)
+                OnEndAim?.Invoke();
+            else
+                OnStartAim?.Invoke();
+            
+            _isAiming = !_isAiming;
         }
     }
 }
