@@ -16,6 +16,7 @@ namespace JustMobyTest.Gameplay
         public event Action OnAttack;
         public event Action OnStartAim;
         public event Action OnEndAim;
+        public event Action<Vector2> OnRotate;
 
         private bool _isMoving;
         private bool _isAiming;
@@ -27,6 +28,7 @@ namespace JustMobyTest.Gameplay
             InputProvider.OnEndMove += EndMove;
             InputProvider.OnAttack += Attack;
             InputProvider.OnSwitchAim += SwitchAim;
+            InputProvider.OnRotate += Rotate;
         }
 
         public void Dispose()
@@ -35,6 +37,7 @@ namespace JustMobyTest.Gameplay
             InputProvider.OnEndMove -= EndMove;
             InputProvider.OnAttack -= Attack;
             InputProvider.OnSwitchAim -= SwitchAim;
+            InputProvider.OnRotate -= Rotate;
         }
 
         public void Tick()
@@ -69,6 +72,11 @@ namespace JustMobyTest.Gameplay
                 OnStartAim?.Invoke();
             
             _isAiming = !_isAiming;
+        }
+
+        private void Rotate(Vector2 delta)
+        {
+            OnRotate?.Invoke(delta);
         }
     }
 }
