@@ -5,20 +5,20 @@ namespace JustMobyTest.Gameplay
 
     public class Health : MonoBehaviour
     {
-        [SerializeField]
-        private float healthAmount;
-
         public event Action OnChanged;
         public event Action OnDeath;
         
-        public float MaxHealth => healthAmount;
+        public float MaxHealth => _health;
         public float HealthAmount { get; private set; }
         public bool IsEmpty => HealthAmount <= 0;
         public bool IsFull => HealthAmount >= MaxHealth;
+        
+        private float _health;
 
-        public void Setup()
+        public void Setup(float health)
         {
-            HealthAmount = MaxHealth;
+            _health = health;
+            HealthAmount = health;
             OnChanged?.Invoke();
         }
         

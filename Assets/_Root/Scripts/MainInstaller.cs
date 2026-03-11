@@ -37,6 +37,12 @@ namespace JustMobyTest
         {
             Container.BindInterfacesAndSelfTo<EnemiesPool>().FromInstance(enemiesPool).AsSingle();
             Container.BindInterfacesAndSelfTo<ProjectilesPool>().FromInstance(projectilesPool).AsSingle();
+            
+            Container.Bind<EnemySpawner>().AsSingle();
+            Container.Bind<ProjectileSpawner>().AsSingle();
+            
+            Container.Bind<DamageOperator>().AsSingle();
+            Container.Bind<DamageFactory>().AsSingle();
         }
     }
 }

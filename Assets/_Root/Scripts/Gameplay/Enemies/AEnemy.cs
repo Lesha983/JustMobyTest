@@ -6,6 +6,7 @@ namespace JustMobyTest.Gameplay
     public struct EnemySpawnInfo : IReinitializingInfo
     {
         public Vector2 Position;
+        public float Health;
     }
 
     public abstract class AEnemy : CustomPoolable<EnemySpawnInfo>, IDamageReceiver
@@ -16,6 +17,7 @@ namespace JustMobyTest.Gameplay
         public override void Reinitialize(EnemySpawnInfo info)
         {
             transform.position = info.Position;
+            health.Setup(info.Health);
         }
 
         public void Receive(Damage damage)

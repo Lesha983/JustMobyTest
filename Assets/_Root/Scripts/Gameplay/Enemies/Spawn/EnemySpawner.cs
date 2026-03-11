@@ -10,19 +10,20 @@ namespace JustMobyTest.Gameplay
         [Inject]
         private EnemiesPool Pool { get; set; }
 
-        public AEnemy Create(AEnemy prefab, Vector3 position)
+        public AEnemy Create(AEnemy prefab, Vector3 position, float health)
         {
             var spawnInfo = new EnemySpawnInfo()
             {
-                Position = position
+                Position = position,
+                Health = health
             };
             
             return Pool.Spawn(prefab, spawnInfo);
         }
 
-        public AEnemy Create(Vector3 position)
+        public AEnemy Create(Vector3 position, float health)
         {
-            return Create(EnemiesCollection.GetRandomEnemy(), position);
+            return Create(EnemiesCollection.GetRandomEnemy(), position, health);
         }
     }
 }

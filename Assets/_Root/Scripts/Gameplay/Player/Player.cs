@@ -8,6 +8,8 @@ namespace JustMobyTest.Gameplay
     {
         [Inject]
         private IInputHandler InputHandler { get; set; }
+        [Inject]
+        private ProjectileSpawner ProjectileSpawner { get; set; }
         
         [SerializeField]
         private CharacterController controller;
@@ -19,11 +21,17 @@ namespace JustMobyTest.Gameplay
         [SerializeField]
         private Transform hand;
         [SerializeField]
+        private Transform gunBarrel;
+        [SerializeField]
         private float speed;
         [SerializeField]
         private float sensitivity = 1.5f;
         [SerializeField]
         private float aimSensitivity = 0.75f;
+        [SerializeField]
+        private Projectile projectilePrefab;
+        [SerializeField]
+        private float damage;
         
         private float _currentSensitivity;
         private float _verticalRotation;
@@ -74,7 +82,12 @@ namespace JustMobyTest.Gameplay
 
         private void OnAttack()
         {
-            Debug.Log($"Attack!");
+            ProjectileSpawner.Spawn(projectilePrefab, new ProjectileSpawnInfo()
+            {
+                Position = gunBarrel.position,
+                Direction = gunBarrel.forward,
+                Damage = damage
+            });
         }
 
         private void OnStartAim()
