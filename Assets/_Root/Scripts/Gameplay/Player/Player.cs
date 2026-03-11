@@ -4,13 +4,15 @@ namespace JustMobyTest.Gameplay
     using UnityEngine;
     using Zenject;
 
-    public class Player : MonoBehaviour
+    public class Player : MonoBehaviour, IDamageReceiver
     {
         [Inject]
         private IInputHandler InputHandler { get; set; }
         
         [SerializeField]
         private CharacterController controller;
+        [SerializeField]
+        private Health health;
         [Space]
         [SerializeField]
         private Transform aim;
@@ -26,6 +28,11 @@ namespace JustMobyTest.Gameplay
         private float _currentSensitivity;
         private float _verticalRotation;
 
+        public void Receive(Damage damage)
+        {
+            
+        }
+
         private void OnEnable()
         {
             InputHandler.OnMove += OnMove;
@@ -33,6 +40,8 @@ namespace JustMobyTest.Gameplay
             InputHandler.OnRotate += OnRotate;
             InputHandler.OnStartAim += OnStartAim;
             InputHandler.OnEndAim += OnEndAim;
+
+            health.OnDeath += Die;
         }
 
         private void OnDisable()
@@ -42,11 +51,18 @@ namespace JustMobyTest.Gameplay
             InputHandler.OnRotate -= OnRotate;
             InputHandler.OnStartAim -= OnStartAim;
             InputHandler.OnEndAim -= OnEndAim;
+
+            health.OnDeath -= Die;
         }
-        
+
         private void Start()
         {
             _currentSensitivity = sensitivity;
+        }
+
+        private void Die()
+        {
+            
         }
 
         private void OnMove(Vector2 value)
@@ -70,7 +86,7 @@ namespace JustMobyTest.Gameplay
         {
             _currentSensitivity = sensitivity;
         }
-        
+
         private void OnRotate(Vector2 value)
         {
             var mouseX = value.x * _currentSensitivity;
