@@ -22,12 +22,15 @@ MonoBehaviour:
     - rid: 5092431275375984640
       type: {class: DamageStats, ns: JustMobyTest.Gameplay, asm: Assembly-CSharp}
       data:
-        DamageCoeff: 0.2
+        <Type>k__BackingField: 0
+        DamageCoeff: 1.2
     - rid: 5092431275375984641
       type: {class: HealthStats, ns: JustMobyTest.Gameplay, asm: Assembly-CSharp}
       data:
-        HealthCoeff: 0.1
+        <Type>k__BackingField: 1
+        HealthCoeff: 1.1
     - rid: 5092431275375984642
       type: {class: SpeedStats, ns: JustMobyTest.Gameplay, asm: Assembly-CSharp}
       data:
-        SpeedCoeff: 0.05
+        <Type>k__BackingField: 2
+        SpeedCoeff: 1.05

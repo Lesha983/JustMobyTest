@@ -23,7 +23,7 @@ namespace JustMobyTest.Gameplay
         public override void Reinitialize(DamageTextInfo info)
         {
             textMesh.alpha = 1f;
-            textMesh.text = info.Amount.ToString();
+            textMesh.text = info.Amount.ToString("#.#");
             textMesh.transform.position = info.Position + offset;
             
             ShowAnimation();

@@ -2,6 +2,7 @@ namespace JustMobyTest.Gameplay
 {
     using Input;
     using NaughtyAttributes;
+    using Save;
     using UnityEngine;
     using UnityEngine.AI;
     using Zenject;
@@ -16,7 +17,13 @@ namespace JustMobyTest.Gameplay
         private DamageFactory DamageFactory { get; set; }
         [Inject]
         private PlayerSettings Settings { get; set; }
-
+        [Inject]
+        private PlayerStatsService StatsService { get; set; }
+        [Inject]
+        private PlayerStatsCollection StatsCollection { get; set; }
+        [Inject]
+        private SaveData SaveData { get; set; }
+        
         [SerializeField]
         private NavMeshAgent agent;
         [SerializeField]
@@ -37,6 +44,8 @@ namespace JustMobyTest.Gameplay
         private float _currentSpeed;
         
         public Health Health => health;
+        public float CurrentDamage => _currentDamage;
+        public float StartDamage => Settings.Damage;
 
         public void Receive(Damage damage)
         {
@@ -49,19 +58,25 @@ namespace JustMobyTest.Gameplay
             Receive(DamageFactory.Create(10f));
         }
 
-        public void SetDamageCoeff(float damageCoeff)
-        {
-            _currentDamage = Settings.Damage * damageCoeff;
-        }
-        
-        public void SetSpeedCoeff(float speedCoeff)
-        {
-            _currentSpeed = Settings.Speed * speedCoeff;
-        }
+        // public void SetDamageCoeff(float damageCoeff)
+        // {
+        //     _currentDamage = Settings.Damage * damageCoeff;
+        // }
+        //
+        // public void SetSpeedCoeff(float speedCoeff)
+        // {
+        //     _currentSpeed = Settings.Speed * speedCoeff;
+        // }
+        //
+        // public void SetHealthCoeff(float healthCoeff)
+        // {
+        //     health.SetHealthCoefficient(healthCoeff);
+        // }
 
-        public void SetHealthCoeff(float healthCoeff)
+        private void Awake()
         {
-            health.SetHealthCoefficient(healthCoeff);
+            health.Setup(Settings.Health);
+            UpdateStats();
         }
 
         private void OnEnable()
@@ -73,6 +88,7 @@ namespace JustMobyTest.Gameplay
             InputHandler.OnEndAim += OnEndAim;
 
             health.OnDeath += Die;
+            StatsService.OnStatsChanged += UpdateStats;
         }
 
         private void OnDisable()
@@ -84,12 +100,31 @@ namespace JustMobyTest.Gameplay
             InputHandler.OnEndAim -= OnEndAim;
 
             health.OnDeath -= Die;
+            StatsService.OnStatsChanged -= UpdateStats;
         }
 
         private void Start()
         {
             _currentSensitivity = Settings.Sensitivity;
-            health.Setup(100);
+        }
+
+        private void UpdateStats()
+        {
+            foreach (var stats in StatsCollection.Stats)
+            {
+                switch (stats.Type)
+                {
+                    case StatsType.Damage:
+                        _currentDamage = Settings.Damage * stats.GetValueBy(SaveData.DamageStatLevel);
+                        break;
+                    case StatsType.Health:
+                        health.SetHealthCoefficient(stats.GetValueBy(SaveData.HealthStatLevel));
+                        break;
+                    case StatsType.Speed:
+                        _currentSpeed = Settings.Speed * stats.GetValueBy(SaveData.SpeedStatLevel);
+                        break;
+                }
+            }
         }
 
         private void Die()
@@ -101,8 +136,6 @@ namespace JustMobyTest.Gameplay
         {
             var direction = transform.right * value.x + transform.forward * value.y;
             agent.Move(direction * _currentSpeed * Time.deltaTime);
-            // controller.Move(direction * speed * Time.deltaTime);
-            // transform.position += direction * speed * Time.deltaTime;
         }
 
         private void OnAttack()

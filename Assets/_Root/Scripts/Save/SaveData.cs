@@ -2,6 +2,7 @@ namespace JustMobyTest.Save
 {
     using UnityEngine;
 
+    //TMP
     public class SaveData
     {
         public int DamageStatLevel
@@ -20,6 +21,12 @@ namespace JustMobyTest.Save
         {
             get => PlayerPrefs.GetInt("SpeedStatLevel", 0);
             set => PlayerPrefs.SetInt("SpeedStatLevel", value);
+        }
+
+        public int UpgradePoints
+        {
+            get => PlayerPrefs.GetInt("UpgradePoints", 0);
+            set => PlayerPrefs.SetInt("UpgradePoints", value);
         }
     }
 }

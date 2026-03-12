@@ -32,7 +32,8 @@ namespace JustMobyTest.Gameplay
             for (var i = 0; i < targetCount; i++)
             {
                 var position = GetSpawnPosition();
-                EnemySpawner.Create(position, 100f);
+                var health = Player.StartDamage * Random.Range(1, 11);
+                EnemySpawner.Create(position, health);
             }
         }
 

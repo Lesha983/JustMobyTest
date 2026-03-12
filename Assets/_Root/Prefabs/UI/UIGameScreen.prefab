@@ -50,6 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de1283ae8b744ffbd5339fe63a63bcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  upgradeStatsPopupPrefab: {fileID: 7547220204892911422, guid: b8d1bb9185b1c4ea5b352fcd2b8f1ad7, type: 3}
 --- !u!1 &7158444239518574624
 GameObject:
   m_ObjectHideFlags: 0
@@ -161,7 +162,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.25
 --- !u!114 &6206835479426295556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,10 +285,10 @@ RectTransform:
   - {fileID: 8794463806667165084}
   m_Father: {fileID: 353913523501053040}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 80, y: -10}
-  m_SizeDelta: {x: 160, y: 20}
+  m_AnchorMin: {x: 0.01518006, y: 0.9250001}
+  m_AnchorMax: {x: 0.22322482, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &3823003935493781403
 MonoBehaviour:
@@ -427,4 +428,4 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
+  m_PixelsPerUnitMultiplier: 0.25

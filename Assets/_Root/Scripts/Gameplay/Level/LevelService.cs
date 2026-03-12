@@ -30,6 +30,11 @@ namespace JustMobyTest.Gameplay
         {
             InputProvider.Disable();
         }
+        
+        public void Resume()
+        {
+            InputProvider.Enable();
+        }
 
         public void EndLevel()
         {

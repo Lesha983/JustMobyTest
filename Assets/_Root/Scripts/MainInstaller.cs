@@ -66,6 +66,7 @@ namespace JustMobyTest
             Container.Bind<SaveData>().AsSingle();
             
             Container.Bind<PlayerStatsService>().AsSingle();
+            Container.BindInterfacesTo<Wallet.Wallet>().AsSingle();
         }
     }
 }

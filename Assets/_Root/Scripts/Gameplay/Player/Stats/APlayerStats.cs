@@ -1,10 +1,14 @@
 namespace JustMobyTest.Gameplay
 {
     using System;
+    using UnityEngine;
 
     [Serializable]
     public abstract class APlayerStats
     {
+        [field: SerializeField]
+        public StatsType Type { get; private set; }
+        
         public abstract string Name { get; }
         public abstract string Description { get; }
 
