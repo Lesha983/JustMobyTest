@@ -11,6 +11,8 @@ namespace JustMobyTest
         private EnemiesPool enemiesPool;
         [SerializeField]
         private ProjectilesPool projectilesPool;
+        [SerializeField]
+        private Player player;
         
         private static readonly string SettingsPath = "Settings";
         private static readonly string EnemiesCollectionPath = SettingsPath + "/EnemiesCollection";
@@ -35,11 +37,16 @@ namespace JustMobyTest
 
         private void Bind()
         {
+            Container.Bind<Player>().FromInstance(player).AsSingle();
+            
+            Container.Bind<LevelService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<EnemyService>().AsSingle();
+            
             Container.BindInterfacesAndSelfTo<EnemiesPool>().FromInstance(enemiesPool).AsSingle();
             Container.BindInterfacesAndSelfTo<ProjectilesPool>().FromInstance(projectilesPool).AsSingle();
             
-            Container.Bind<EnemySpawner>().AsSingle();
-            Container.Bind<ProjectileSpawner>().AsSingle();
+            Container.BindInterfacesAndSelfTo<EnemySpawner>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ProjectileSpawner>().AsSingle();
             
             Container.Bind<DamageOperator>().AsSingle();
             Container.Bind<DamageFactory>().AsSingle();

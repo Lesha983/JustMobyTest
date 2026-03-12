@@ -5,7 +5,7 @@ namespace JustMobyTest.Gameplay
     
     public struct EnemySpawnInfo : IReinitializingInfo
     {
-        public Vector2 Position;
+        public Vector3 Position;
         public float Health;
     }
 

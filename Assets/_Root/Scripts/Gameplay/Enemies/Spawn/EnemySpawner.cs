@@ -1,14 +1,33 @@
 namespace JustMobyTest.Gameplay
 {
+    using System;
+    using System.Collections.Generic;
     using UnityEngine;
     using Zenject;
 
-    public class EnemySpawner
+    public class EnemySpawner : IInitializable, IDisposable
     {
         [Inject]
         private EnemiesCollection EnemiesCollection { get; set; }
         [Inject]
         private EnemiesPool Pool { get; set; }
+        
+        public event Action OnSpawn;
+        public event Action OnDespawn;
+        
+        public List<AEnemy> ActiveEnemies => Pool.ActiveEnemies;
+        
+        public void Initialize()
+        {
+            Pool.OnSpawn += Spawn;
+            Pool.OnDespawn += Despawn;
+        }
+
+        public void Dispose()
+        {
+            Pool.OnSpawn -= Spawn;
+            Pool.OnDespawn -= Despawn;
+        }
 
         public AEnemy Create(AEnemy prefab, Vector3 position, float health)
         {
@@ -24,6 +43,16 @@ namespace JustMobyTest.Gameplay
         public AEnemy Create(Vector3 position, float health)
         {
             return Create(EnemiesCollection.GetRandomEnemy(), position, health);
+        }
+
+        private void Spawn(AEnemy enemy)
+        {
+            OnSpawn?.Invoke();
+        }
+
+        private void Despawn(AEnemy enemy)
+        {
+            OnDespawn?.Invoke();
         }
     }
 }

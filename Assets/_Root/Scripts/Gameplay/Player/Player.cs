@@ -2,6 +2,7 @@ namespace JustMobyTest.Gameplay
 {
     using Input;
     using UnityEngine;
+    using UnityEngine.AI;
     using Zenject;
 
     public class Player : MonoBehaviour, IDamageReceiver
@@ -10,9 +11,9 @@ namespace JustMobyTest.Gameplay
         private IInputHandler InputHandler { get; set; }
         [Inject]
         private ProjectileSpawner ProjectileSpawner { get; set; }
-        
+
         [SerializeField]
-        private CharacterController controller;
+        private NavMeshAgent agent;
         [SerializeField]
         private Health health;
         [Space]
@@ -76,7 +77,8 @@ namespace JustMobyTest.Gameplay
         private void OnMove(Vector2 value)
         {
             var direction = transform.right * value.x + transform.forward * value.y;
-            controller.Move(direction * speed * Time.deltaTime);
+            agent.Move(direction * speed * Time.deltaTime);
+            // controller.Move(direction * speed * Time.deltaTime);
             // transform.position += direction * speed * Time.deltaTime;
         }
 

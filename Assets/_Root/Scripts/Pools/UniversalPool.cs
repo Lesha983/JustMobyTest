@@ -16,6 +16,9 @@ namespace JustMobyTest.Pools
     {
         [Inject] 
         private IInstantiator Instantiator { get; set; }
+        
+        public event Action<TId> OnSpawn;
+        public event Action<TId> OnDespawn;
 
         protected Dictionary<int, Queue<TId>> _pools = new();
         protected Dictionary<TId, int> _itemToId = new();
@@ -31,6 +34,7 @@ namespace JustMobyTest.Pools
             obj.gameObject.SetActive(true);
             obj.Reinitialize(info);
             _active.Add(obj);
+            OnSpawn?.Invoke(obj);
             return obj;
         }
 
@@ -47,6 +51,7 @@ namespace JustMobyTest.Pools
             var pool = _pools[id];
             pool.Enqueue(customPoolable);
             _active.Remove(customPoolable);
+            OnDespawn?.Invoke(customPoolable);
         }
         
         private TId Get(TId prefab)
