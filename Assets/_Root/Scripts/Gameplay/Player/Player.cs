@@ -1,6 +1,7 @@
 namespace JustMobyTest.Gameplay
 {
     using Input;
+    using NaughtyAttributes;
     using UnityEngine;
     using UnityEngine.AI;
     using Zenject;
@@ -11,6 +12,8 @@ namespace JustMobyTest.Gameplay
         private IInputHandler InputHandler { get; set; }
         [Inject]
         private ProjectileSpawner ProjectileSpawner { get; set; }
+        [Inject]
+        private DamageFactory DamageFactory { get; set; }
 
         [SerializeField]
         private NavMeshAgent agent;
@@ -36,10 +39,18 @@ namespace JustMobyTest.Gameplay
         
         private float _currentSensitivity;
         private float _verticalRotation;
+        
+        public Health Health => health;
 
         public void Receive(Damage damage)
         {
-            
+            health.TakeDamage(damage.Value);
+        }
+
+        [Button]
+        public void TakeDamage()
+        {
+            Receive(DamageFactory.Create(10f));
         }
 
         private void OnEnable()
@@ -67,11 +78,12 @@ namespace JustMobyTest.Gameplay
         private void Start()
         {
             _currentSensitivity = sensitivity;
+            health.Setup(100);
         }
 
         private void Die()
         {
-            
+            Debug.Log($"Player died!");
         }
 
         private void OnMove(Vector2 value)
