@@ -43,7 +43,7 @@ namespace JustMobyTest
         {
             Container.Bind<Player>().FromInstance(player).AsSingle();
             
-            Container.Bind<LevelService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<LevelService>().AsSingle();
             Container.BindInterfacesAndSelfTo<EnemyService>().AsSingle();
             
             Container.BindInterfacesAndSelfTo<EnemiesPool>().FromInstance(enemiesPool).AsSingle();
