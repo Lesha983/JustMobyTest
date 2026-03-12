@@ -81,11 +81,6 @@ namespace JustMobyTest.Pools
         private void CreatePool(TId prefab)
         {
             _pools.Add(prefab.GetInstanceID(), new Queue<TId>());
-            // var obj = Instantiator.CreateEmptyGameObject($"{prefab.name}Pool");;
-            // obj.transform.SetParent(transform);
-            // var pool = obj.AddComponent<CustomPooled<TId, TInfo>>();
-            // pool.Initialize(prefab);
-            // _pools.Add(prefab, pool);
         }
     }
 }

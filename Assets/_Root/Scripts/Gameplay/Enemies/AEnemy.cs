@@ -2,7 +2,8 @@ namespace JustMobyTest.Gameplay
 {
     using Pools;
     using UnityEngine;
-    
+    using Zenject;
+
     public struct EnemySpawnInfo : IReinitializingInfo
     {
         public Vector3 Position;
@@ -11,6 +12,9 @@ namespace JustMobyTest.Gameplay
 
     public abstract class AEnemy : CustomPoolable<EnemySpawnInfo>, IDamageReceiver
     {
+        [Inject]
+        private DamageTextSpawner DamageTextSpawner { get; set; }
+        
         [SerializeField]
         private Health health;
         
@@ -23,6 +27,7 @@ namespace JustMobyTest.Gameplay
         public void Receive(Damage damage)
         {
             health.TakeDamage(damage.Value);
+            DamageTextSpawner.Spawn(damage, transform.position);
         }
 
         protected virtual void OnEnable()

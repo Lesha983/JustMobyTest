@@ -12,10 +12,13 @@ namespace JustMobyTest
         [SerializeField]
         private ProjectilesPool projectilesPool;
         [SerializeField]
+        private DamageTextPool damageTextPool;
+        [SerializeField]
         private Player player;
         
         private static readonly string SettingsPath = "Settings";
         private static readonly string EnemiesCollectionPath = SettingsPath + "/EnemiesCollection";
+        private static readonly string DamageTextSettingsPath = SettingsPath + "/DamageTextSettings";
 
         public override void InstallBindings()
         {
@@ -33,6 +36,7 @@ namespace JustMobyTest
 #endif
             
             Container.Bind<EnemiesCollection>().FromResources(EnemiesCollectionPath).AsSingle();
+            Container.Bind<DamageTextSettings>().FromResources(DamageTextSettingsPath).AsSingle();
         }
 
         private void Bind()
@@ -50,6 +54,9 @@ namespace JustMobyTest
             
             Container.Bind<DamageOperator>().AsSingle();
             Container.Bind<DamageFactory>().AsSingle();
+            
+            Container.Bind<DamageTextSpawner>().AsSingle();
+            Container.BindInterfacesAndSelfTo<DamageTextPool>().FromInstance(damageTextPool).AsSingle();
         }
     }
 }
