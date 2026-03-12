@@ -14,6 +14,8 @@ namespace JustMobyTest.Gameplay
         private ProjectileSpawner ProjectileSpawner { get; set; }
         [Inject]
         private DamageFactory DamageFactory { get; set; }
+        [Inject]
+        private PlayerSettings Settings { get; set; }
 
         [SerializeField]
         private NavMeshAgent agent;
@@ -27,18 +29,12 @@ namespace JustMobyTest.Gameplay
         [SerializeField]
         private Transform gunBarrel;
         [SerializeField]
-        private float speed;
-        [SerializeField]
-        private float sensitivity = 1.5f;
-        [SerializeField]
-        private float aimSensitivity = 0.75f;
-        [SerializeField]
         private Projectile projectilePrefab;
-        [SerializeField]
-        private float damage;
         
         private float _currentSensitivity;
         private float _verticalRotation;
+        private float _currentDamage;
+        private float _currentSpeed;
         
         public Health Health => health;
 
@@ -51,6 +47,21 @@ namespace JustMobyTest.Gameplay
         public void TakeDamage()
         {
             Receive(DamageFactory.Create(10f));
+        }
+
+        public void SetDamageCoeff(float damageCoeff)
+        {
+            _currentDamage = Settings.Damage * damageCoeff;
+        }
+        
+        public void SetSpeedCoeff(float speedCoeff)
+        {
+            _currentSpeed = Settings.Speed * speedCoeff;
+        }
+
+        public void SetHealthCoeff(float healthCoeff)
+        {
+            health.SetHealthCoefficient(healthCoeff);
         }
 
         private void OnEnable()
@@ -77,7 +88,7 @@ namespace JustMobyTest.Gameplay
 
         private void Start()
         {
-            _currentSensitivity = sensitivity;
+            _currentSensitivity = Settings.Sensitivity;
             health.Setup(100);
         }
 
@@ -89,7 +100,7 @@ namespace JustMobyTest.Gameplay
         private void OnMove(Vector2 value)
         {
             var direction = transform.right * value.x + transform.forward * value.y;
-            agent.Move(direction * speed * Time.deltaTime);
+            agent.Move(direction * _currentSpeed * Time.deltaTime);
             // controller.Move(direction * speed * Time.deltaTime);
             // transform.position += direction * speed * Time.deltaTime;
         }
@@ -100,18 +111,18 @@ namespace JustMobyTest.Gameplay
             {
                 Position = gunBarrel.position,
                 Direction = gunBarrel.forward,
-                Damage = damage
+                Damage = _currentDamage
             });
         }
 
         private void OnStartAim()
         {
-            _currentSensitivity = aimSensitivity;
+            _currentSensitivity = Settings.AimSensitivity;
         }
 
         private void OnEndAim()
         {
-            _currentSensitivity = sensitivity;
+            _currentSensitivity = Settings.Sensitivity;
         }
 
         private void OnRotate(Vector2 value)

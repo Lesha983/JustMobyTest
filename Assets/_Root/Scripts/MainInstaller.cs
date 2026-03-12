@@ -2,6 +2,7 @@ namespace JustMobyTest
 {
     using Gameplay;
     using Input;
+    using Save;
     using UnityEngine;
     using Zenject;
 
@@ -19,6 +20,8 @@ namespace JustMobyTest
         private static readonly string SettingsPath = "Settings";
         private static readonly string EnemiesCollectionPath = SettingsPath + "/EnemiesCollection";
         private static readonly string DamageTextSettingsPath = SettingsPath + "/DamageTextSettings";
+        private static readonly string PlayerSettingsPath = SettingsPath + "/PlayerSettings";
+        private static readonly string PlayerStatsCollectionPath = SettingsPath + "/PlayerStatsCollection";
 
         public override void InstallBindings()
         {
@@ -37,6 +40,8 @@ namespace JustMobyTest
             
             Container.Bind<EnemiesCollection>().FromResources(EnemiesCollectionPath).AsSingle();
             Container.Bind<DamageTextSettings>().FromResources(DamageTextSettingsPath).AsSingle();
+            Container.Bind<PlayerSettings>().FromResources(PlayerSettingsPath).AsSingle();
+            Container.Bind<PlayerStatsCollection>().FromResources(PlayerStatsCollectionPath).AsSingle();
         }
 
         private void Bind()
@@ -57,6 +62,10 @@ namespace JustMobyTest
             
             Container.Bind<DamageTextSpawner>().AsSingle();
             Container.BindInterfacesAndSelfTo<DamageTextPool>().FromInstance(damageTextPool).AsSingle();
+            
+            Container.Bind<SaveData>().AsSingle();
+            
+            Container.Bind<PlayerStatsService>().AsSingle();
         }
     }
 }

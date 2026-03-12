@@ -1577,8 +1577,8 @@ MonoBehaviour:
   hand: {fileID: 488843075}
   gunBarrel: {fileID: 548144188}
   speed: 10
-  sensitivity: 1.5
-  aimSensitivity: 0.75
+  sensitivity: 1
+  aimSensitivity: 0.5
   projectilePrefab: {fileID: 8536698680809054794, guid: 4c5254491792248e7a69b1f49461a9b9, type: 3}
   damage: 30
 --- !u!114 &679379931
