@@ -10,12 +10,6 @@ namespace JustMobyTest.Gameplay
 
     public class Player : MonoBehaviour, IDamageReceiver
     {
-        // [Inject]
-        // private IInputHandler InputHandler { get; set; }
-        [Inject]
-        private ProjectileSpawner ProjectileSpawner { get; set; }
-        [Inject]
-        private DamageFactory DamageFactory { get; set; }
         [Inject]
         private PlayerSettings Settings { get; set; }
         [Inject]
@@ -24,83 +18,65 @@ namespace JustMobyTest.Gameplay
         private PlayerStatsCollection StatsCollection { get; set; }
         [Inject]
         private SaveData SaveData { get; set; }
-        
+
+        public event Action OnDeath;
         public event Action OnStartAim;
         public event Action OnEndAim;
         
         [SerializeField]
-        private NavMeshAgent agent;
+        private Agent agent;
         [SerializeField]
         private Health health;
+        [SerializeField]
+        private Gun gun;
+        [SerializeField]
+        private LayerMask shootableLayers;
         [Space]
         [SerializeField]
         private Transform aim;
         [SerializeField]
         private Transform hand;
-        [SerializeField]
-        private Transform gunBarrel;
-        [SerializeField]
-        private Projectile projectilePrefab;
         
         private float _currentSensitivity;
         private float _verticalRotation;
-        private float _currentDamage;
-        private float _currentSpeed;
+        private Camera _camera;
+        private float _maxDistance = 100f;
         
         public Health Health => health;
-        public float CurrentDamage => _currentDamage;
-        public float StartDamage => Settings.Damage;
+        public float CurrentDamage => gun.CurrentDamage;
+        public float StartDamage => gun.StartDamage;
+        public Transform Transform => transform;
 
         public void Receive(Damage damage)
         {
             health.TakeDamage(damage.Value);
         }
 
-        [Button]
-        public void TakeDamage()
-        {
-            Receive(DamageFactory.Create(10f));
-        }
-
-        // public void SetDamageCoeff(float damageCoeff)
-        // {
-        //     _currentDamage = Settings.Damage * damageCoeff;
-        // }
-        //
-        // public void SetSpeedCoeff(float speedCoeff)
-        // {
-        //     _currentSpeed = Settings.Speed * speedCoeff;
-        // }
-        //
-        // public void SetHealthCoeff(float healthCoeff)
-        // {
-        //     health.SetHealthCoefficient(healthCoeff);
-        // }
-
         public void Move(Vector2 value)
         {
             var direction = transform.right * value.x + transform.forward * value.y;
-            agent.Move(direction * _currentSpeed * Time.deltaTime);
+            agent.Move(direction);
         }
 
-        public void Attack()
+        public void StartAttack()
         {
             Vector3 targetPoint;
 
-            var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+            var ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f));
 
-            if (Physics.Raycast(ray, out var hit, 100f))
+            if (Physics.Raycast(ray, out var hit, _maxDistance, shootableLayers))
                 targetPoint = hit.point;
             else
-                targetPoint = ray.origin + ray.direction * 100f;
+                targetPoint = ray.origin + ray.direction * _maxDistance;
             
-            var dir = (targetPoint - gunBarrel.position).normalized;
-            ProjectileSpawner.Spawn(projectilePrefab, new ProjectileSpawnInfo()
-            {
-                Position = gunBarrel.position,
-                Direction = dir,
-                Damage = _currentDamage
-            });
+            var dir = (targetPoint - gun.ShootPoint.position).normalized;
+            
+            gun.StartAttack(dir);
+        }
+
+        public void EndAttack()
+        {
+            gun.EndAttack();
         }
 
         public void StartAim()
@@ -133,7 +109,10 @@ namespace JustMobyTest.Gameplay
 
         private void Awake()
         {
+            _camera = Camera.main;
             health.Setup(Settings.Health);
+            gun.Setup(Settings.Damage);
+            agent.Setup(Settings.Speed);
             UpdateStats();
         }
 
@@ -161,13 +140,13 @@ namespace JustMobyTest.Gameplay
                 switch (stats.Type)
                 {
                     case StatsType.Damage:
-                        _currentDamage = Settings.Damage * stats.GetValueBy(SaveData.DamageStatLevel);
+                        gun.SetCoefficient(stats.GetValueBy(SaveData.DamageStatLevel));
                         break;
                     case StatsType.Health:
                         health.SetHealthCoefficient(stats.GetValueBy(SaveData.HealthStatLevel));
                         break;
                     case StatsType.Speed:
-                        _currentSpeed = Settings.Speed * stats.GetValueBy(SaveData.SpeedStatLevel);
+                        agent.SetSpeedCoefficient(stats.GetValueBy(SaveData.SpeedStatLevel));
                         break;
                 }
             }
@@ -175,7 +154,7 @@ namespace JustMobyTest.Gameplay
 
         private void Die()
         {
-            Debug.Log($"Player died!");
+            OnDeath?.Invoke();
         }
     }
 }

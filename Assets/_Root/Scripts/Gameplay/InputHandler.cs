@@ -29,7 +29,8 @@ namespace JustMobyTest.Gameplay
         {
             InputProvider.OnStartMove += StartMove;
             InputProvider.OnEndMove += EndMove;
-            InputProvider.OnAttack += Attack;
+            InputProvider.OnStartAttack += StartStartAttack;
+            InputProvider.OnEndAttack += EndAttack;
             InputProvider.OnSwitchAim += SwitchAim;
             InputProvider.OnRotate += Rotate;
         }
@@ -38,7 +39,7 @@ namespace JustMobyTest.Gameplay
         {
             InputProvider.OnStartMove -= StartMove;
             InputProvider.OnEndMove -= EndMove;
-            InputProvider.OnAttack -= Attack;
+            InputProvider.OnStartAttack -= StartStartAttack;
             InputProvider.OnSwitchAim -= SwitchAim;
             InputProvider.OnRotate -= Rotate;
         }
@@ -78,10 +79,15 @@ namespace JustMobyTest.Gameplay
             _isMoving = false;
         }
 
-        private void Attack()
+        private void StartStartAttack()
         {
             OnAttack?.Invoke();
-            Player.Attack();
+            Player.StartAttack();
+        }
+
+        private void EndAttack()
+        {
+            Player.EndAttack();
         }
 
         private void SwitchAim()

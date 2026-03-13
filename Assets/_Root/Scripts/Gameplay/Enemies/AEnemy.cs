@@ -18,17 +18,21 @@ namespace JustMobyTest.Gameplay
         [SerializeField]
         private Health health;
         
+        public Transform Transform => transform;
+        
         public override void Reinitialize(EnemySpawnInfo info)
         {
             transform.position = info.Position;
             health.Setup(info.Health);
+            SetStartState();
         }
 
-        public void Receive(Damage damage)
+        public virtual void Receive(Damage damage)
         {
             health.TakeDamage(damage.Value);
             DamageTextSpawner.Spawn(damage, transform.position);
         }
+
 
         protected virtual void OnEnable()
         {
@@ -40,6 +44,10 @@ namespace JustMobyTest.Gameplay
             health.OnDeath -= Die;
         }
 
+        protected virtual void SetStartState()
+        {
+        }
+        
         protected abstract void Die();
     }
 }

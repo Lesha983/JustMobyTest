@@ -11,7 +11,8 @@ namespace JustMobyTest.Input
         public event Action<Vector2> OnPointerMove;
         public event Action<Vector2> OnPointerUp;
         
-        public event Action OnAttack;
+        public event Action OnStartAttack;
+        public event Action OnEndAttack;
         public event Action<InputAction.CallbackContext> OnStartMove;
         public event Action OnEndMove;
         public event Action<Vector2> OnRotate;
@@ -45,7 +46,8 @@ namespace JustMobyTest.Input
             actionUI.Click.canceled += ctx => OnPointerUp?.Invoke(PointerPosition);
             
             var actionPlayer = InputAction.Player;
-            actionPlayer.Attack.performed += ctx => OnAttack?.Invoke();
+            actionPlayer.Attack.performed += ctx => OnStartAttack?.Invoke();
+            actionPlayer.Attack.canceled += ctx => OnEndAttack?.Invoke();
             actionPlayer.Move.performed += ctx => OnStartMove?.Invoke(ctx);
             actionPlayer.Move.canceled += ctx => OnEndMove?.Invoke();
             actionPlayer.Aim.performed += ctx => OnSwitchAim?.Invoke();

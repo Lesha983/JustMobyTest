@@ -9,7 +9,8 @@ namespace JustMobyTest.Input
         event Action<Vector2> OnPointerDown;
         event Action<Vector2> OnPointerMove;
         event Action<Vector2> OnPointerUp;
-        event Action OnAttack;
+        event Action OnStartAttack;
+        event Action OnEndAttack;
         event Action<InputAction.CallbackContext> OnStartMove;
         event Action OnEndMove;
         event Action OnSwitchAim;
