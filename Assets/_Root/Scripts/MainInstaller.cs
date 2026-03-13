@@ -4,6 +4,7 @@ namespace JustMobyTest
     using Input;
     using Save;
     using UnityEngine;
+    using Wallet;
     using Zenject;
 
     public class MainInstaller : MonoInstaller
@@ -67,6 +68,7 @@ namespace JustMobyTest
             
             Container.Bind<PlayerStatsService>().AsSingle();
             Container.BindInterfacesTo<Wallet.Wallet>().AsSingle();
+            // Container.BindInterfacesTo<BackPack>().AsSingle();
         }
     }
 }

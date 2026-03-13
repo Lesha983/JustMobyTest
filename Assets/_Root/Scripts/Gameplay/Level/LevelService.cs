@@ -21,11 +21,15 @@ namespace JustMobyTest.Gameplay
         {
             InputHandler.Disable();
             Player.OnDeath += EndLevel;
+            // InputHandler.OnPause += Pause;
+            // InputHandler.OnResume += Resume;
         }
 
         public void Dispose()
         {
             Player.OnDeath -= EndLevel;
+            // InputHandler.OnPause -= Pause;
+            // InputHandler.OnResume -= Resume;
         }
 
         public void StartLevel()
@@ -57,5 +61,6 @@ namespace JustMobyTest.Gameplay
             OnLevelStop?.Invoke();
             PlayerPrefs.DeleteAll();
         }
+        
     }
 }

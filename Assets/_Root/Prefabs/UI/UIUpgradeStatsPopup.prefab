@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Upgrade
+  m_text: Apply
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -92,7 +92,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 27.5
+  m_fontSize: 26.85
   m_fontSizeBase: 18.6
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -313,8 +313,8 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 4
   m_Spacing: 10
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 1
@@ -412,7 +412,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.55
+  m_fontSize: 33.7
   m_fontSizeBase: 13.7
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -546,7 +546,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 37.8
+  m_fontSize: 36.9
   m_fontSizeBase: 13.7
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -722,7 +722,7 @@ GameObject:
   - component: {fileID: 549823123456587133}
   - component: {fileID: 2047265104499249373}
   m_Layer: 5
-  m_Name: UpgradeButton
+  m_Name: ApplyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -922,7 +922,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24.15
+  m_fontSize: 23.6
   m_fontSizeBase: 20.81
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1092,6 +1092,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pointsValueLabel: {fileID: 7858885062462806551}
   closeButton: {fileID: 9149492272471819121}
-  upgradeButton: {fileID: 2047265104499249373}
+  applyButton: {fileID: 2047265104499249373}
   elementPrefab: {fileID: 2543724258950490661, guid: 4ecf140114d9d47c490e7506f19dcd51, type: 3}
   elementsParent: {fileID: 1590422443031500358}

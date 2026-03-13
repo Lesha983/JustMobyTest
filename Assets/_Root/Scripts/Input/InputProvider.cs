@@ -17,6 +17,7 @@ namespace JustMobyTest.Input
         public event Action OnEndMove;
         public event Action<Vector2> OnRotate;
         public event Action OnSwitchAim;
+        public event Action OnEscape;
         
         public Vector2 PointerPosition => Pointer.current.position.ReadValue();
         public InputActions InputAction { get; private set; }
@@ -52,6 +53,7 @@ namespace JustMobyTest.Input
             actionPlayer.Move.canceled += ctx => OnEndMove?.Invoke();
             actionPlayer.Aim.performed += ctx => OnSwitchAim?.Invoke();
             actionPlayer.Rotate.performed += ctx => OnRotate?.Invoke(ctx.ReadValue<Vector2>());
+            actionPlayer.Escape.performed += ctx => OnEscape?.Invoke();
         }
     }
     

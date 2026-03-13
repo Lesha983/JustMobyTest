@@ -12,6 +12,9 @@ namespace JustMobyTest.Gameplay
         [Inject]
         private Player Player { get; set; }
         
+        public event Action OnDetected;
+        public event Action OnDespawn;
+        
         [SerializeField]
         private DetectedZone detectedZone;
         [Space]
@@ -23,6 +26,8 @@ namespace JustMobyTest.Gameplay
         private EnemyStateMachine _stateMachine;
         private bool _isTriggered;
         private float _patrolDelay = 1f;
+        
+        public Health Health => health;
         
         public bool IsMoving => agent.IsMoving;
 
@@ -61,6 +66,7 @@ namespace JustMobyTest.Gameplay
         {
             Wallet.AddPoints();
             _stateMachine.Exit();
+            OnDespawn?.Invoke();
             Despawn();
         }
 
@@ -71,6 +77,7 @@ namespace JustMobyTest.Gameplay
             _isTriggered = true;
             attackState.Setup(agent, target.Transform, gun);
             _stateMachine.ChangeState(attackState);
+            OnDetected?.Invoke();
         }
     }
 }

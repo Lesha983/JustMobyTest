@@ -19,11 +19,14 @@ namespace JustMobyTest.Gameplay
         public event Action OnStartAim;
         public event Action OnEndAim;
         public event Action<Vector2> OnRotate;
+        public event Action OnPause;
+        public event Action OnResume;
 
         private bool _isMoving;
         private bool _isAiming;
         private InputAction.CallbackContext _moveContext;
         private bool _ignoreLookFrame;
+        private bool _isEscapePressed;
         
         public void Initialize()
         {
@@ -33,6 +36,7 @@ namespace JustMobyTest.Gameplay
             InputProvider.OnEndAttack += EndAttack;
             InputProvider.OnSwitchAim += SwitchAim;
             InputProvider.OnRotate += Rotate;
+            InputProvider.OnEscape += Escape;
         }
 
         public void Dispose()
@@ -40,22 +44,24 @@ namespace JustMobyTest.Gameplay
             InputProvider.OnStartMove -= StartMove;
             InputProvider.OnEndMove -= EndMove;
             InputProvider.OnStartAttack -= StartStartAttack;
+            InputProvider.OnEndAttack -= EndAttack;
             InputProvider.OnSwitchAim -= SwitchAim;
             InputProvider.OnRotate -= Rotate;
+            InputProvider.OnEscape -= Escape;
         }
         
         public void Enable()
         {
             InputProvider.Enable();
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            // Cursor.lockState = CursorLockMode.Locked;
+            // Cursor.visible = false;
         }
 
         public void Disable()
         {
             InputProvider.Disable();
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            // Cursor.lockState = CursorLockMode.None;
+            // Cursor.visible = true;
             _ignoreLookFrame = true;
         }
 
@@ -116,6 +122,16 @@ namespace JustMobyTest.Gameplay
 
             OnRotate?.Invoke(delta);
             Player.Rotate(delta);
+        }
+
+        private void Escape()
+        {
+            if(_isEscapePressed)
+                OnResume?.Invoke();
+            else
+                OnPause?.Invoke();
+
+            _isEscapePressed = !_isEscapePressed;
         }
     }
 }

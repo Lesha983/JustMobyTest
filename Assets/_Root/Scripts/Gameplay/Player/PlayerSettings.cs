@@ -16,5 +16,7 @@ namespace JustMobyTest.Gameplay
         public float Sensitivity { get; private set; }
         [field: SerializeField]
         public float AimSensitivity { get; private set; }
+        [field: SerializeField]
+        public Vector2 VerticalRotationClamp { get; private set; }
     }
 }

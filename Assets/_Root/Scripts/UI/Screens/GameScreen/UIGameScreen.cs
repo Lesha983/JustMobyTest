@@ -2,6 +2,7 @@ namespace JustMobyTest.UI
 {
     using Gameplay;
     using UnityEngine;
+    using UnityEngine.UI;
     using Wallet;
     using Zenject;
 
@@ -13,7 +14,9 @@ namespace JustMobyTest.UI
         private IInstantiator Instantiator { get; set; }
         [Inject]
         private LevelService LevelService { get; set; }
-        
+
+        [SerializeField]
+        private Button statsButton;
         [SerializeField]
         private UIUpgradeStatsPopup upgradeStatsPopupPrefab;
         
@@ -21,12 +24,14 @@ namespace JustMobyTest.UI
 
         private void OnEnable()
         {
-            Wallet.OnUpdated += CreateUpgradeStatsPopup;
+            // Wallet.OnUpdated += CreateUpgradeStatsPopup;
+            statsButton.onClick.AddListener(CreateUpgradeStatsPopup);
         }
 
         private void OnDisable()
         {
-            Wallet.OnUpdated -= CreateUpgradeStatsPopup;
+            // Wallet.OnUpdated -= CreateUpgradeStatsPopup;
+            statsButton.onClick.RemoveListener(CreateUpgradeStatsPopup);
         }
 
         private void CreateUpgradeStatsPopup()

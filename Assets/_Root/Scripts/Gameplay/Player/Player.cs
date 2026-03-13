@@ -43,6 +43,7 @@ namespace JustMobyTest.Gameplay
         private float _verticalRotation;
         private Camera _camera;
         private float _maxDistance = 100f;
+        private Vector2 _aimClamp;
         
         public Health Health => health;
         public float CurrentDamage => gun.CurrentDamage;
@@ -56,6 +57,7 @@ namespace JustMobyTest.Gameplay
             agent.Setup(Settings.Speed);
             UpdateStats();
             transform.position = startPosition;
+            EndAim();
         }
         
         public void Receive(Damage damage)
@@ -112,7 +114,7 @@ namespace JustMobyTest.Gameplay
 
             // вращение прицела (вертикально)
             _verticalRotation -= mouseY;
-            _verticalRotation = Mathf.Clamp(_verticalRotation, -70f, 70f);
+            _verticalRotation = Mathf.Clamp(_verticalRotation, _aimClamp.x, _aimClamp.y);
 
             aim.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);
             hand.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);
@@ -121,6 +123,7 @@ namespace JustMobyTest.Gameplay
         private void Awake()
         {
             _camera = Camera.main;
+            _aimClamp = Settings.VerticalRotationClamp;
         }
 
         private void OnEnable()

@@ -23,14 +23,17 @@ MonoBehaviour:
       type: {class: DamageStats, ns: JustMobyTest.Gameplay, asm: Assembly-CSharp}
       data:
         <Type>k__BackingField: 0
+        <MaxLevel>k__BackingField: 5
         DamageCoeff: 1.2
     - rid: 5092431275375984641
       type: {class: HealthStats, ns: JustMobyTest.Gameplay, asm: Assembly-CSharp}
       data:
         <Type>k__BackingField: 1
+        <MaxLevel>k__BackingField: 10
         HealthCoeff: 1.1
     - rid: 5092431275375984642
       type: {class: SpeedStats, ns: JustMobyTest.Gameplay, asm: Assembly-CSharp}
       data:
         <Type>k__BackingField: 2
+        <MaxLevel>k__BackingField: 10
         SpeedCoeff: 1.05

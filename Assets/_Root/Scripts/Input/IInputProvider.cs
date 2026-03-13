@@ -15,6 +15,7 @@ namespace JustMobyTest.Input
         event Action OnEndMove;
         event Action OnSwitchAim;
         event Action<Vector2> OnRotate;
+        event Action OnEscape;
         Vector2 PointerPosition { get; }
         void Enable();
         void Disable();

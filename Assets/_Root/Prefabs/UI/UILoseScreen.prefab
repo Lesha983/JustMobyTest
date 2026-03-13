@@ -94,10 +94,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
+  m_fontSize: 72
   m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -220,10 +220,10 @@ RectTransform:
   - {fileID: 6614213605903815554}
   m_Father: {fileID: 4275464099389436271}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.25642365, y: 0.15239026}
-  m_AnchorMax: {x: 0.74200004, y: 0.3594878}
-  m_AnchoredPosition: {x: 0.5, y: 3.600006}
-  m_SizeDelta: {x: 1, y: -4}
+  m_AnchorMin: {x: 0.35700002, y: 0.1728148}
+  m_AnchorMax: {x: 0.6797084, y: 0.32700002}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8555694821136940913
 CanvasRenderer:

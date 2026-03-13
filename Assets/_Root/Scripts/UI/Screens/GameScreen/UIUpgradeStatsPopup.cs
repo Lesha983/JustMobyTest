@@ -13,8 +13,6 @@ namespace JustMobyTest.UI
     public class UIUpgradeStatsPopup : MonoBehaviour
     {
         [Inject]
-        private PlayerStatsCollection StatsCollection { get; set; }
-        [Inject]
         private IInstantiator Instantiator { get; set; }
         [Inject]
         private PlayerStatsService StatsService { get; set; }
@@ -26,35 +24,36 @@ namespace JustMobyTest.UI
         [SerializeField]
         private Button closeButton;
         [SerializeField]
-        private Button upgradeButton;
+        private Button applyButton;
         [SerializeField]
         private UIUpgradeStatElement elementPrefab;
         [SerializeField]
         private Transform elementsParent;
 
-        private int _maxStats = 2;
+        // private int _maxStats = 3;
         private List<UIUpgradeStatElement> _elements = new();
         private Action _closeCallback;
-        private UIUpgradeStatElement _chosenElement;
+        private IBackPack _backPack;
 
         public void Setup(Action closeCallback)
         {
             _closeCallback = closeCallback;
-            upgradeButton.gameObject.SetActive(false);
-            upgradeButton.interactable = Wallet.HasEnoughPoints();
+            applyButton.gameObject.SetActive(false);
+            applyButton.interactable = Wallet.HasEnoughPoints();
             pointsValueLabel.text = Wallet.Points.ToString();
+            _backPack = new BackPack();
         }
 
         private void OnEnable()
         {
             closeButton.onClick.AddListener(Close);
-            upgradeButton.onClick.AddListener(Apply);
+            applyButton.onClick.AddListener(Apply);
         }
 
         private void OnDisable()
         {
             closeButton.onClick.RemoveListener(Close);
-            upgradeButton.onClick.RemoveListener(Apply);
+            applyButton.onClick.RemoveListener(Apply);
         }
 
         private void Start()
@@ -64,15 +63,20 @@ namespace JustMobyTest.UI
 
         private void CreateElements()
         {
-            var stats = new List<APlayerStats>();
-            stats.AddRange(StatsCollection.Stats);
-            Shuffle(stats);
-            var elementsCount = Mathf.Min(stats.Count, _maxStats);
-            for (var i = 0; i < elementsCount; i++)
+            var stats = StatsService.GetAvailableStats();
+            if (stats.Count == 0)
+            {
+                Close();
+                return;
+            }
+            
+            // Shuffle(stats);
+            // var elementsCount = Mathf.Min(stats.Count, _maxStats);
+            for (var i = 0; i < stats.Count; i++)
             {
                 var stat = stats[i];
                 var element = Instantiator.InstantiatePrefabForComponent<UIUpgradeStatElement>(elementPrefab, elementsParent);
-                element.Setup(stat, () => ChooseElement(element));
+                element.Setup(_backPack, stat, UpdateView);
                 _elements.Add(element);
             }
         }
@@ -86,25 +90,25 @@ namespace JustMobyTest.UI
             }
         }
 
-        private void ChooseElement(UIUpgradeStatElement element)
+        private void UpdateView()
         {
-            foreach (var statElement in _elements)
+            pointsValueLabel.text = (Wallet.Points - _backPack.Points).ToString();
+            applyButton.gameObject.SetActive(true);
+            foreach (var element in _elements)
             {
-                if(statElement == element)
-                    continue;
-                statElement.UnChoose();
+                element.UpdateView();
             }
-            _chosenElement = element;
-            upgradeButton.gameObject.SetActive(true);
         }
 
         private void Apply()
         {
-            if(_chosenElement == null)
-                return;
+            foreach (var element in _elements)
+            {
+                element.Apply();
+            }
             
-            StatsService.UpgradeStats(_chosenElement.PlayerStat);
-            Wallet.RemovePoints();
+            Wallet.RemovePoints(_backPack.Points);
+            _backPack.Clear();
             Close();
         }
 

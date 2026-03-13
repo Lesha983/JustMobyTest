@@ -17,3 +17,4 @@ MonoBehaviour:
   <Speed>k__BackingField: 10
   <Sensitivity>k__BackingField: 0.5
   <AimSensitivity>k__BackingField: 0.2
+  <VerticalRotationClamp>k__BackingField: {x: -70, y: 70}
