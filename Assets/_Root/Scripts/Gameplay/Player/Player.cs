@@ -36,6 +36,8 @@ namespace JustMobyTest.Gameplay
         private Transform aim;
         [SerializeField]
         private Transform hand;
+        [SerializeField]
+        private Vector3 startPosition;
         
         private float _currentSensitivity;
         private float _verticalRotation;
@@ -47,6 +49,15 @@ namespace JustMobyTest.Gameplay
         public float StartDamage => gun.StartDamage;
         public Transform Transform => transform;
 
+        public void Setup()
+        {
+            health.Setup(Settings.Health);
+            gun.Setup(Settings.Damage);
+            agent.Setup(Settings.Speed);
+            UpdateStats();
+            transform.position = startPosition;
+        }
+        
         public void Receive(Damage damage)
         {
             health.TakeDamage(damage.Value);
@@ -110,10 +121,6 @@ namespace JustMobyTest.Gameplay
         private void Awake()
         {
             _camera = Camera.main;
-            health.Setup(Settings.Health);
-            gun.Setup(Settings.Damage);
-            agent.Setup(Settings.Speed);
-            UpdateStats();
         }
 
         private void OnEnable()

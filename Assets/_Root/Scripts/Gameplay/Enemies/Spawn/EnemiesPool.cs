@@ -7,5 +7,15 @@ namespace JustMobyTest.Gameplay
     public class EnemiesPool : UniversalPool<AEnemy, EnemySpawnInfo>
     {
         public List<AEnemy> ActiveEnemies => _active;
+        
+        public void DeactivateAll()
+        {
+            var enemies = new List<AEnemy>();
+            enemies.AddRange(_active);
+            foreach (var enemy in enemies)
+            {
+                enemy.Despawn();
+            }
+        }
     }
 }

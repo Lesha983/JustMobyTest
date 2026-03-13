@@ -11,6 +11,8 @@ namespace JustMobyTest.Gameplay
         private EnemyService EnemyService { get; set; }
         [Inject]
         private IInputHandler InputHandler { get; set; }
+        [Inject]
+        private Player Player { get; set; }
         
         public event Action OnLevelStart;
         public event Action OnLevelStop;
@@ -18,18 +20,20 @@ namespace JustMobyTest.Gameplay
         public void Initialize()
         {
             InputHandler.Disable();
+            Player.OnDeath += EndLevel;
         }
 
         public void Dispose()
         {
-            
+            Player.OnDeath -= EndLevel;
         }
 
         public void StartLevel()
         {
             Time.timeScale = 1f;
-            EnemyService.TryCreateNewEnemies();
+            EnemyService.Setup();
             InputHandler.Enable();
+            Player.Setup();
             OnLevelStart?.Invoke();
         }
 
@@ -47,9 +51,11 @@ namespace JustMobyTest.Gameplay
 
         public void EndLevel()
         {
+            EnemyService.DestroyAllEnemies();
             Time.timeScale = 0f;
             InputHandler.Disable();
             OnLevelStop?.Invoke();
+            PlayerPrefs.DeleteAll();
         }
     }
 }

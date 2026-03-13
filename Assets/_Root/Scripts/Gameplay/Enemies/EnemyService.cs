@@ -15,6 +15,7 @@ namespace JustMobyTest.Gameplay
         
         private float _spawnRange = 50f;
         private int _maxEnemies = 5;
+        private bool _isActive;
 
         public void Initialize()
         {
@@ -26,8 +27,23 @@ namespace JustMobyTest.Gameplay
             EnemySpawner.OnDespawn -= TryCreateNewEnemies;
         }
 
-        public void TryCreateNewEnemies()
+        public void Setup()
         {
+            _isActive = true;
+            TryCreateNewEnemies();
+        }
+
+        public void DestroyAllEnemies()
+        {
+            _isActive = false;
+            EnemySpawner.DeactivateAll();
+        }
+
+        private void TryCreateNewEnemies()
+        {
+            if(!_isActive)
+                return;
+            
             var targetCount = Mathf.Clamp(_maxEnemies - EnemySpawner.ActiveEnemies.Count, 0, _maxEnemies);
             for (var i = 0; i < targetCount; i++)
             {

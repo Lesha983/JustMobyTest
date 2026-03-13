@@ -47,6 +47,11 @@ namespace JustMobyTest.Gameplay
             return Create(EnemiesCollection.GetRandomEnemy(), position, health);
         }
 
+        public void DeactivateAll()
+        {
+            Pool.DeactivateAll();
+        }
+
         private void Spawn(AEnemy enemy)
         {
             OnSpawn?.Invoke();
