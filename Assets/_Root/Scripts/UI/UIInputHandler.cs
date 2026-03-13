@@ -11,5 +11,9 @@ namespace JustMobyTest.UI
         public event Action OnStartAim;
         public event Action OnEndAim;
         public event Action<Vector2> OnRotate;
+        
+        public void Enable() {}
+
+        public void Disable() {}
     }
 }

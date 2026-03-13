@@ -15,5 +15,5 @@ MonoBehaviour:
   <Health>k__BackingField: 100
   <Damage>k__BackingField: 10
   <Speed>k__BackingField: 10
-  <Sensitivity>k__BackingField: 1
-  <AimSensitivity>k__BackingField: 0.5
+  <Sensitivity>k__BackingField: 0.5
+  <AimSensitivity>k__BackingField: 0.2

@@ -5,10 +5,13 @@ namespace JustMobyTest.Input
 
     public interface IInputHandler
     {
-        public event Action<Vector2> OnMove;
-        public event Action OnAttack;
-        public event Action OnStartAim;
-        public event Action OnEndAim;
-        public event Action<Vector2> OnRotate;
+        // public event Action<Vector2> OnMove;
+        // public event Action OnAttack;
+        // public event Action OnStartAim;
+        // public event Action OnEndAim;
+        // public event Action<Vector2> OnRotate;
+        
+        void Enable();
+        void Disable();
     }
 }

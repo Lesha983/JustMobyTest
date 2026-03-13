@@ -9,7 +9,7 @@ namespace JustMobyTest.Gameplay
     public class CameraService : MonoBehaviour
     {
         [Inject]
-        private IInputHandler InputHandler { get; set; }
+        private Player Player { get; set; }
         
         [SerializeField]
         private List<VirtualCamera> cameras;
@@ -32,14 +32,14 @@ namespace JustMobyTest.Gameplay
 
         private void OnEnable()
         {
-            InputHandler.OnStartAim += SetAimCamera;
-            InputHandler.OnEndAim += SetPlayerCamera;
+            Player.OnStartAim += SetAimCamera;
+            Player.OnEndAim += SetPlayerCamera;
         }
 
         private void OnDisable()
         {
-            InputHandler.OnStartAim -= SetAimCamera;
-            InputHandler.OnEndAim -= SetPlayerCamera;
+            Player.OnStartAim -= SetAimCamera;
+            Player.OnEndAim -= SetPlayerCamera;
         }
 
         private void Start()

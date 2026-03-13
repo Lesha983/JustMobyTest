@@ -1,5 +1,6 @@
 namespace JustMobyTest.Gameplay
 {
+    using System;
     using Input;
     using NaughtyAttributes;
     using Save;
@@ -9,8 +10,8 @@ namespace JustMobyTest.Gameplay
 
     public class Player : MonoBehaviour, IDamageReceiver
     {
-        [Inject]
-        private IInputHandler InputHandler { get; set; }
+        // [Inject]
+        // private IInputHandler InputHandler { get; set; }
         [Inject]
         private ProjectileSpawner ProjectileSpawner { get; set; }
         [Inject]
@@ -23,6 +24,9 @@ namespace JustMobyTest.Gameplay
         private PlayerStatsCollection StatsCollection { get; set; }
         [Inject]
         private SaveData SaveData { get; set; }
+        
+        public event Action OnStartAim;
+        public event Action OnEndAim;
         
         [SerializeField]
         private NavMeshAgent agent;
@@ -73,6 +77,60 @@ namespace JustMobyTest.Gameplay
         //     health.SetHealthCoefficient(healthCoeff);
         // }
 
+        public void Move(Vector2 value)
+        {
+            var direction = transform.right * value.x + transform.forward * value.y;
+            agent.Move(direction * _currentSpeed * Time.deltaTime);
+        }
+
+        public void Attack()
+        {
+            Vector3 targetPoint;
+
+            var ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+
+            if (Physics.Raycast(ray, out var hit, 100f))
+                targetPoint = hit.point;
+            else
+                targetPoint = ray.origin + ray.direction * 100f;
+            
+            var dir = (targetPoint - gunBarrel.position).normalized;
+            ProjectileSpawner.Spawn(projectilePrefab, new ProjectileSpawnInfo()
+            {
+                Position = gunBarrel.position,
+                Direction = dir,
+                Damage = _currentDamage
+            });
+        }
+
+        public void StartAim()
+        {
+            _currentSensitivity = Settings.AimSensitivity;
+            OnStartAim?.Invoke();
+        }
+
+        public void EndAim()
+        {
+            _currentSensitivity = Settings.Sensitivity;
+            OnEndAim?.Invoke();
+        }
+
+        public void Rotate(Vector2 value)
+        {
+            var mouseX = value.x * _currentSensitivity;
+            var mouseY = value.y * _currentSensitivity;
+
+            // вращение игрока (горизонтально)
+            transform.Rotate(Vector3.up * mouseX);
+
+            // вращение прицела (вертикально)
+            _verticalRotation -= mouseY;
+            _verticalRotation = Mathf.Clamp(_verticalRotation, -70f, 70f);
+
+            aim.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);
+            hand.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);
+        }
+
         private void Awake()
         {
             health.Setup(Settings.Health);
@@ -81,24 +139,12 @@ namespace JustMobyTest.Gameplay
 
         private void OnEnable()
         {
-            InputHandler.OnMove += OnMove;
-            InputHandler.OnAttack += OnAttack;
-            InputHandler.OnRotate += OnRotate;
-            InputHandler.OnStartAim += OnStartAim;
-            InputHandler.OnEndAim += OnEndAim;
-
             health.OnDeath += Die;
             StatsService.OnStatsChanged += UpdateStats;
         }
 
         private void OnDisable()
         {
-            InputHandler.OnMove -= OnMove;
-            InputHandler.OnAttack -= OnAttack;
-            InputHandler.OnRotate -= OnRotate;
-            InputHandler.OnStartAim -= OnStartAim;
-            InputHandler.OnEndAim -= OnEndAim;
-
             health.OnDeath -= Die;
             StatsService.OnStatsChanged -= UpdateStats;
         }
@@ -130,48 +176,6 @@ namespace JustMobyTest.Gameplay
         private void Die()
         {
             Debug.Log($"Player died!");
-        }
-
-        private void OnMove(Vector2 value)
-        {
-            var direction = transform.right * value.x + transform.forward * value.y;
-            agent.Move(direction * _currentSpeed * Time.deltaTime);
-        }
-
-        private void OnAttack()
-        {
-            ProjectileSpawner.Spawn(projectilePrefab, new ProjectileSpawnInfo()
-            {
-                Position = gunBarrel.position,
-                Direction = gunBarrel.forward,
-                Damage = _currentDamage
-            });
-        }
-
-        private void OnStartAim()
-        {
-            _currentSensitivity = Settings.AimSensitivity;
-        }
-
-        private void OnEndAim()
-        {
-            _currentSensitivity = Settings.Sensitivity;
-        }
-
-        private void OnRotate(Vector2 value)
-        {
-            var mouseX = value.x * _currentSensitivity;
-            var mouseY = value.y * _currentSensitivity;
-
-            // вращение игрока (горизонтально)
-            transform.Rotate(Vector3.up * mouseX);
-
-            // вращение прицела (вертикально)
-            _verticalRotation -= mouseY;
-            _verticalRotation = Mathf.Clamp(_verticalRotation, -70f, 70f);
-
-            aim.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);
-            hand.localRotation = Quaternion.Euler(_verticalRotation, 0f, 0f);
         }
     }
 }

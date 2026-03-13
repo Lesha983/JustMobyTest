@@ -10,6 +10,8 @@ namespace JustMobyTest.Gameplay
     {
         [Inject]
         private IInputProvider InputProvider { get; set; }
+        [Inject]
+        private Player Player { get; set; }
         
         public event Action<Vector2> OnMove;
         
@@ -21,6 +23,7 @@ namespace JustMobyTest.Gameplay
         private bool _isMoving;
         private bool _isAiming;
         private InputAction.CallbackContext _moveContext;
+        private bool _ignoreLookFrame;
         
         public void Initialize()
         {
@@ -39,6 +42,21 @@ namespace JustMobyTest.Gameplay
             InputProvider.OnSwitchAim -= SwitchAim;
             InputProvider.OnRotate -= Rotate;
         }
+        
+        public void Enable()
+        {
+            InputProvider.Enable();
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        public void Disable()
+        {
+            InputProvider.Disable();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            _ignoreLookFrame = true;
+        }
 
         public void Tick()
         {
@@ -46,6 +64,7 @@ namespace JustMobyTest.Gameplay
                 return;
             
             OnMove?.Invoke(_moveContext.ReadValue<Vector2>());
+            Player.Move(_moveContext.ReadValue<Vector2>());
         }
 
         private void StartMove(InputAction.CallbackContext context)
@@ -62,21 +81,35 @@ namespace JustMobyTest.Gameplay
         private void Attack()
         {
             OnAttack?.Invoke();
+            Player.Attack();
         }
 
         private void SwitchAim()
         {
-            if(_isAiming)
+            if (_isAiming)
+            {
                 OnEndAim?.Invoke();
+                Player.EndAim();
+            }
             else
+            {
                 OnStartAim?.Invoke();
-            
+                Player.StartAim();
+            }
+
             _isAiming = !_isAiming;
         }
 
         private void Rotate(Vector2 delta)
         {
+            if (_ignoreLookFrame)
+            {
+                _ignoreLookFrame = false;
+                return;
+            }
+
             OnRotate?.Invoke(delta);
+            Player.Rotate(delta);
         }
     }
 }
