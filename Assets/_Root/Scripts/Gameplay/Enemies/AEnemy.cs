@@ -8,6 +8,8 @@ namespace JustMobyTest.Gameplay
     {
         public Vector3 Position;
         public float Health;
+        public float Speed;
+        public float Damage;
     }
 
     public abstract class AEnemy : CustomPoolable<EnemySpawnInfo>, IDamageReceiver
@@ -16,14 +18,19 @@ namespace JustMobyTest.Gameplay
         private DamageTextSpawner DamageTextSpawner { get; set; }
         
         [SerializeField]
-        private Health health;
-        
+        protected Health health;
+        [SerializeField]
+        protected Agent agent;
+        [SerializeField]
+        protected Gun gun;
         public Transform Transform => transform;
         
         public override void Reinitialize(EnemySpawnInfo info)
         {
             transform.position = info.Position;
             health.Setup(info.Health);
+            agent.Setup(info.Speed);
+            gun.Setup(info.Damage);
             SetStartState();
         }
 

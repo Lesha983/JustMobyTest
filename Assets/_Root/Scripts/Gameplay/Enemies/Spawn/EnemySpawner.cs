@@ -29,12 +29,14 @@ namespace JustMobyTest.Gameplay
             Pool.OnDespawn -= Despawn;
         }
 
-        public AEnemy Create(AEnemy prefab, Vector3 position, float health)
+        public AEnemy Create(AEnemy prefab, Vector3 position, float health = 100f, float speed = 5f, float damage = 10f)
         {
             var spawnInfo = new EnemySpawnInfo()
             {
                 Position = position,
-                Health = health
+                Health = health,
+                Speed = speed,
+                Damage = damage
             };
             
             return Pool.Spawn(prefab, spawnInfo);

@@ -14,5 +14,10 @@ namespace JustMobyTest.Gameplay
             _currentState = newState;
             _currentState?.Enter();
         }
+
+        public void Exit()
+        {
+            _currentState?.Exit();
+        }
     }
 }
